@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>ThreeJS Textures</title>
+</head>
+<body>
+  <div>
+    <form id="cargar-imagen" method="POST">
+      <input type="file" name="data"/>
+      <input type="submit" value="Enviar"/>
+    </form>
+  </div>
+  <div id="canvas">
+  </div>
+  <script
+  src="http://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <script id="vertex_shader" type="x-shader/x-vertex">
+  
+  varying vec3 vNormal;
+  
+  void main() {
+    
+    vNormal = normal;
+    
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+    
+  }
+  
+</script>
+
+<script id="fragment_shader" type="x-shader/x-fragment">
+
+uniform sampler2D texture;
+
+varying vec3 vNormal;
+
+void main() {
+  
+  vec2 uv = normalize( vNormal ).xy * 0.5 + 0.5;
+  
+  vec3 color = texture2D( texture, uv ).rgb;
+  
+  if ( vNormal.z < - 0.85 ) color = vec3( 0.777, 0.74, 0.74 ); // back of eye
+  
+  gl_FragColor = vec4( color, 1.0 );
+  
+}
+
+</script>
+
+<script src="js/three.min.js"></script>
+<script type="text/javascript" src="js/main.js">  
+</script>
+</body>
+</html>
