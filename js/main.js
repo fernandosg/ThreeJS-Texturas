@@ -1,27 +1,5 @@
 var scene,camera,renderer,loader;
 
-$("#cargar-imagen").on('submit', (function(ev) {
-  ev.preventDefault();
-  $.ajax({
-    url: 'cargar.php',
-    type: 'POST',
-    data: new FormData(this),
-    contentType: false,
-    cache: false,
-    processData: false,
-    success: function(data, status, xhr) {
-      obtenerMaterialConTextura("http://localhost:8000/"+data,function(material){
-        objeto.material=material;
-        objeto.material.needsUpdate=true;
-      })
-    },
-    error: function(xhr, status, error) {
-      console.log("Error");
-    }
-  });
-}));
-
-
 function inicio(){
   var SCREEN_WIDTH = 650, SCREEN_HEIGHT = 480;
   var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
@@ -84,6 +62,34 @@ function loop(){
   renderer.render(scene,camera);
   requestAnimationFrame(loop);
 }
+
+
+/* Eventos */
+
+$("#cargar-imagen").on('submit', (function(ev) {
+  ev.preventDefault();
+  $.ajax({
+    url: 'cargar.php',
+    type: 'POST',
+    data: new FormData(this),
+    contentType: false,
+    cache: false,
+    processData: false,
+    success: function(data, status, xhr) {
+      obtenerMaterialConTextura("http://localhost:8000/"+data,function(material){
+        objeto.material=material;
+        objeto.material.needsUpdate=true;
+      })
+    },
+    error: function(xhr, status, error) {
+      console.log("Error");
+    }
+  });
+}));
+
+$("#tipo-geometria").on("change",function(ev){
+  var opcion=ev.target.selectedOptions[0].value; //
+});
 
 inicio();
 loop();
