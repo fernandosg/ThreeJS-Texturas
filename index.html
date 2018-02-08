@@ -9,6 +9,17 @@
       <input type="file" name="data"/>
       <input type="submit" value="Enviar"/>
     </form>
+    <select id="tipo-geometria">
+      <option value="sphere" selected>SphereGeometry</option>
+      <option value="plane">PlaneGeometry</option>
+      <option value="box">BoxGeometry</option>
+      <option value="circle">CircleGeometry</option>
+      <option value="ring">RingGeometry</option>
+      <option value="cylinder">CylinderGeometry</option>
+      <option value="lathe">LatheGeometry</option>
+      <option value="torus">TorusGeometry</option>
+      <option value="torusknot">TorusKnotGeometry</option>
+    </select>
   </div>
   <div id="canvas">
   </div>
@@ -17,17 +28,17 @@
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
   <script id="vertex_shader" type="x-shader/x-vertex">
-  
+
   varying vec3 vNormal;
-  
+
   void main() {
-    
+
     vNormal = normal;
-    
+
     gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-    
+
   }
-  
+
 </script>
 
 <script id="fragment_shader" type="x-shader/x-fragment">
@@ -37,21 +48,21 @@ uniform sampler2D texture;
 varying vec3 vNormal;
 
 void main() {
-  
+
   vec2 uv = normalize( vNormal ).xy * 0.5 + 0.5;
-  
+
   vec3 color = texture2D( texture, uv ).rgb;
-  
+
   if ( vNormal.z < - 0.85 ) color = vec3( 0.777, 0.74, 0.74 ); // back of eye
-  
+
   gl_FragColor = vec4( color, 1.0 );
-  
+
 }
 
 </script>
 
 <script src="js/three.min.js"></script>
-<script type="text/javascript" src="js/main.js">  
+<script type="text/javascript" src="js/main.js">
 </script>
 </body>
 </html>
