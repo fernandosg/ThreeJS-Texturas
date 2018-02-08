@@ -1,5 +1,5 @@
 var scene,camera,renderer,loader;
-
+var generador;
 function inicio(){
   var SCREEN_WIDTH = 650, SCREEN_HEIGHT = 480;
   var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
@@ -18,6 +18,7 @@ function inicio(){
   obtenerMeshConImagen('img/planeta_textura.jpg',function(objeto){
     scene.add(objeto);
   });
+  generador=new Generador();
 }
 
 function obtenerMaterialConTextura(imagen,callback){
@@ -87,9 +88,11 @@ $("#cargar-imagen").on('submit', (function(ev) {
   });
 }));
 
-$("#tipo-geometria").on("change",function(ev){
-  var opcion=ev.target.selectedOptions[0].value; //
-});
+
+var geometria_nueva;
+$("#seleccionar-geometia").click(function(evt){
+  geometria_nueva=generador.seleccionar($("#tipo-geometria").selectedOptions[0].value);
+})
 
 inicio();
 loop();

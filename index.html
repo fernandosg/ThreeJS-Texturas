@@ -9,17 +9,20 @@
       <input type="file" name="data"/>
       <input type="submit" value="Enviar"/>
     </form>
-    <select id="tipo-geometria">
-      <option value="sphere" selected>SphereGeometry</option>
-      <option value="plane">PlaneGeometry</option>
-      <option value="box">BoxGeometry</option>
-      <option value="circle">CircleGeometry</option>
-      <option value="ring">RingGeometry</option>
-      <option value="cylinder">CylinderGeometry</option>
-      <option value="lathe">LatheGeometry</option>
-      <option value="torus">TorusGeometry</option>
-      <option value="torusknot">TorusKnotGeometry</option>
-    </select>
+    <div>
+      <select id="tipo-geometria">
+        <option value="sphere" selected>SphereGeometry</option>
+        <option value="plane">PlaneGeometry</option>
+        <option value="box">BoxGeometry</option>
+        <option value="circle">CircleGeometry</option>
+        <option value="ring">RingGeometry</option>
+        <option value="cylinder">CylinderGeometry</option>
+        <option value="lathe">LatheGeometry</option>
+        <option value="torus">TorusGeometry</option>
+        <option value="torusknot">TorusKnotGeometry</option>
+      </select>
+      <button id="seleccionar-geometria">Seleccionar geometría</button>
+    </div>
   </div>
   <div id="canvas">
   </div>
@@ -62,7 +65,7 @@ void main() {
 </script>
 
 <script src="js/three.min.js"></script>
-<script type="text/javascript" src="js/main.js">
-</script>
+<script type="text/javascript" src="js/geometrias/generador.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
