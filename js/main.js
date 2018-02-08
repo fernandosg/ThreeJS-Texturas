@@ -10,18 +10,19 @@ $("#cargar-imagen").on('submit', (function(ev) {
     cache: false,
     processData: false,
     success: function(data, status, xhr) {
-      console.log("Muestra con exito");
-      console.dir(data);
+      obtenerMaterialConTextura("http://localhost:8000/"+data,function(material){
+        objeto.material=material;
+        objeto.material.needsUpdate=true;
+      })
     },
     error: function(xhr, status, error) {
-      console.log("Error en algo");
+      console.log("Error");
     }
   });
 }));
 
 
 function inicio(){
-  
   var SCREEN_WIDTH = 650, SCREEN_HEIGHT = 480;
   var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
   scene=new THREE.Scene();
@@ -34,26 +35,32 @@ function inicio(){
   renderer.autoClear = false;
   renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
   container = document.getElementById('canvas');
-  container.appendChild( renderer.domElement );     
-  loader= new THREE.TextureLoader();    
+  container.appendChild( renderer.domElement );
+  loader= new THREE.TextureLoader();
   obtenerMeshConImagen('img/planeta_textura.jpg',function(objeto){
     scene.add(objeto);
-  });           
+  });
+}
+
+function obtenerMaterialConTextura(imagen,callback){
+  loader.load(imagen,function(textura){
+    var uniforms={
+      "texture":{type:"t",value:textura}
+    };
+    callback(crearShaderMaterial(uniforms));
+  },function(xhr){
+
+  });
 }
 
 function obtenerMeshConImagen(imagen,callback){
   loader.load(
     imagen,
-    function ( textura ) {         
+    function ( textura ) {
       var uniforms = {
-        "texture": { type: "t", value: textura }	
+        "texture": { type: "t", value: textura }
       };
-      var material = new THREE.ShaderMaterial( {
-        uniforms		: uniforms,
-        vertexShader	: document.getElementById( 'vertex_shader' ).textContent,
-        fragmentShader	: document.getElementById( 'fragment_shader' ).textContent
-      });
-      objeto=new THREE.Mesh(new THREE.SphereGeometry(30,32,24),material);         
+      objeto=new THREE.Mesh(new THREE.SphereGeometry(30,32,24),crearShaderMaterial(uniforms));
       callback(objeto);
     },
     function ( xhr ) {
@@ -65,11 +72,16 @@ function obtenerMeshConImagen(imagen,callback){
   );
 }
 
-
-
+function crearShaderMaterial(uniforms){
+  return new THREE.ShaderMaterial( {
+    uniforms		: uniforms,
+    vertexShader	: document.getElementById( 'vertex_shader' ).textContent,
+    fragmentShader	: document.getElementById( 'fragment_shader' ).textContent
+  });
+}
 
 function loop(){
-  renderer.render(scene,camera);   
+  renderer.render(scene,camera);
   requestAnimationFrame(loop);
 }
 
