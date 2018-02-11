@@ -1,5 +1,6 @@
 var scene,camera,renderer,loader;
 var generador;
+var objeto_mesh;
 function inicio(){
   var SCREEN_WIDTH = 650, SCREEN_HEIGHT = 480;
   var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
@@ -16,7 +17,8 @@ function inicio(){
   container.appendChild( renderer.domElement );
   loader= new THREE.TextureLoader();
   obtenerMeshConImagen('img/planeta_textura.jpg',function(objeto){
-    scene.add(objeto);
+    objeto_mesh=objeto;
+    scene.add(objeto_mesh);
   });
   generador=new Generador();
 }
@@ -90,8 +92,13 @@ $("#cargar-imagen").on('submit', (function(ev) {
 
 
 var geometria_nueva;
-$("#seleccionar-geometia").click(function(evt){
-  geometria_nueva=generador.seleccionar($("#tipo-geometria").selectedOptions[0].value);
+$("#seleccionar-geometria").click(function(evt){
+  geometria_nueva=generador.seleccionar($('#tipo-geometria').find(":selected").val());
+  var objeto_nuevo=new THREE.Mesh(geometria_nueva,objeto_mesh.material);
+  objeto_nuevo.position.set(objeto_mesh.position.x,objeto_mesh.position.y,objeto_mesh.position.z);
+  scene.remove(objeto_mesh);
+  scene.add(objeto_nuevo);
+  objeto_mesh=objeto_nuevo;
 })
 
 inicio();
