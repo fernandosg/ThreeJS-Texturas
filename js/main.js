@@ -79,5 +79,17 @@ $("#seleccionar-geometria").click(function(evt){
   objeto_mesh=objeto_nuevo;
 })
 
+
+var fov=0;
+function mousewheel( event ) {
+  event.preventDefault();
+  var fov = camera.fov + event.deltaY * 0.05;
+  camera.fov = THREE.Math.clamp( fov, 10, 75 );
+  camera.updateProjectionMatrix();
+
+}
+
+window.addEventListener('mousewheel', mousewheel, false);
+
 inicio();
 loop();
