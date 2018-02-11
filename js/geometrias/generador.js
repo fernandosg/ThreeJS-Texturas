@@ -38,7 +38,7 @@ function Generador(){
         geometria=new THREE.LatheGeometry(puntos,20);
         break;
       case "torus":
-        geometria=new THREE.TorusGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3]);
+        geometria=new THREE.TorusGeometry(parseInt(vals_inic[0]),parseInt(vals_inic[1]),parseInt(vals_inic[2]),parseInt(vals_inic[3]));
         break;
       case "torusknot":
         geometria=new THREE.TorusKnotGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3]);
