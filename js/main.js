@@ -39,11 +39,11 @@ function loop(){
   requestAnimationFrame(loop);
 }
 
-async function cargarImagenComoMaterial(imagen){
-  var material=await generador_material.generar("SphereGeometry",{"imagen":imagen});
+async function cargarImagenComoMaterial(imagen,objeto){
+  var material=await generador_material.generar(objeto.geometry.type,{"imagen":imagen});
   if(material!=null){
-    objeto_mesh.material=material;
-    objeto_mesh.material.needsUpdate=true;
+    objeto.material=material;
+    objeto.material.needsUpdate=true;
   }else {
     console.log("Hubo un error en la creación del material");
   }
@@ -61,7 +61,7 @@ $("#cargar-imagen").on('submit', (function(ev) {
     cache: false,
     processData: false,
     success: function(data, status, xhr) {
-      cargarImagenComoMaterial(imagen);
+      cargarImagenComoMaterial("http://localhost:8000/"+data,objeto_mesh);
     },
     error: function(xhr, status, error) {
       console.log("Error");
