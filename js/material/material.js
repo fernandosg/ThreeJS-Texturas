@@ -8,10 +8,6 @@ function SphereGeometryMaterial(){
     });
   }
 
-  function crearMeshBasicMaterial(propiedades){
-    return new THREE.MeshBasicMaterial(propiedades);
-  }
-
   function cargar(imagen,resolve){
     loader.load(imagen,function(textura){
       var uniforms={
