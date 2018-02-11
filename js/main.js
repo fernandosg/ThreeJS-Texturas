@@ -1,6 +1,7 @@
-var scene,camera,renderer,loader;
+var scene,camera,renderer;
 var generador;
 var objeto_mesh;
+var generador_material=new GeneradorMaterial();
 function inicio(){
   var SCREEN_WIDTH = 650, SCREEN_HEIGHT = 480;
   var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
@@ -15,7 +16,6 @@ function inicio(){
   renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
   container = document.getElementById('canvas');
   container.appendChild( renderer.domElement );
-  loader= new THREE.TextureLoader();
   obtenerMeshConImagen('img/planeta_textura.jpg',function(objeto){
     objeto_mesh=objeto;
     scene.add(objeto_mesh);
@@ -23,49 +23,31 @@ function inicio(){
   generador=new Generador();
 }
 
-function obtenerMaterialConTextura(imagen,callback){
-  loader.load(imagen,function(textura){
-    var uniforms={
-      "texture":{type:"t",value:textura}
-    };
-    callback(crearShaderMaterial(uniforms));
-  },function(xhr){
-
-  });
+async function obtenerMeshConImagen(imagen,callback){
+  var material=await generador_material.generar("SphereGeometry",{"imagen":imagen});
+  if(material!=null){
+    var objeto=new THREE.Mesh(new THREE.SphereGeometry(30,32,24),material);
+    callback(objeto);
+  }else{
+    console.log("El material fue nulo");
+  }
 }
 
-function obtenerMeshConImagen(imagen,callback){
-  loader.load(
-    imagen,
-    function ( textura ) {
-      var uniforms = {
-        "texture": { type: "t", value: textura }
-      };
-      objeto=new THREE.Mesh(new THREE.SphereGeometry(30,32,24),crearShaderMaterial(uniforms));
-      callback(objeto);
-    },
-    function ( xhr ) {
-      console.log("");
-    },
-    function ( xhr ) {
-      console.log( 'Error en la carga' );
-    }
-  );
-}
-
-function crearShaderMaterial(uniforms){
-  return new THREE.ShaderMaterial( {
-    uniforms		: uniforms,
-    vertexShader	: document.getElementById( 'vertex_shader' ).textContent,
-    fragmentShader	: document.getElementById( 'fragment_shader' ).textContent
-  });
-}
 
 function loop(){
   renderer.render(scene,camera);
   requestAnimationFrame(loop);
 }
 
+async function cargarImagenComoMaterial(imagen){
+  var material=await generador_material.generar("SphereGeometry",{"imagen":imagen});
+  if(material!=null){
+    objeto_mesh.material=material;
+    objeto_mesh.material.needsUpdate=true;
+  }else {
+    console.log("Hubo un error en la creación del material");
+  }
+}
 
 /* Eventos */
 
@@ -79,10 +61,7 @@ $("#cargar-imagen").on('submit', (function(ev) {
     cache: false,
     processData: false,
     success: function(data, status, xhr) {
-      obtenerMaterialConTextura("http://localhost:8000/"+data,function(material){
-        objeto.material=material;
-        objeto.material.needsUpdate=true;
-      })
+      cargarImagenComoMaterial(imagen);
     },
     error: function(xhr, status, error) {
       console.log("Error");
