@@ -14,29 +14,39 @@ function Generador(){
   var seleccionar=function(opcion){
     var geometria,vals_inic;
     if(opcion!="lathe")
-          vals_inic=obtenerValoresIniciales(opcion).split(",")
+          vals_inic=obtenerValoresIniciales(opcion)
     switch(opcion){
       case "sphere":
-        geometria=new SphereGeometry(vals_inic[0],vals_inic[1],vals_inic[2])
+        geometria=new THREE.SphereGeometry(vals_inic[0],vals_inic[1],vals_inic[2])
         break;
       case "plane":
-        geometria=new PlaneGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3])
-      case "box"
-        geometria=new BoxGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3],vals_inic[4],vals_inic[5]);
+        geometria=new THREE.PlaneGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3]);
+        break;
+      case "box":
+        geometria=new THREE.BoxGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3],vals_inic[4],vals_inic[5]);
+        break;
       case "circle":
-        geometria=new CircleGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3]);
+        geometria=new THREE.CircleGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3]);
+        break;
       case "ring":
-        geometria=new RingGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3],vals_inic[4],vals_inic[5])
+        geometria=new THREE.RingGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3],vals_inic[4],vals_inic[5]);
+        break;
       case "cylinder":
-        geometria=new CylinderGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3],vals_inic[4]);
+        geometria=new THREE.CylinderGeometry(25, 75, 100, 40, 5);
+        break;
       case "lathe":
-        geometria=new LatheGeometry(puntos,20);
+        geometria=new THREE.LatheGeometry(puntos,20);
+        break;
       case "torus":
-        geometria=new TorusGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3]);
+        geometria=new THREE.TorusGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3]);
+        break;
       case "torusknot":
-        geometria=new TorusKnotGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3]);
+        geometria=new THREE.TorusKnotGeometry(vals_inic[0],vals_inic[1],vals_inic[2],vals_inic[3]);
+        break;
+      default:
+        geometria=undefined;
     }
-    return geometia;
+    return geometria;
   }
 
   return{
